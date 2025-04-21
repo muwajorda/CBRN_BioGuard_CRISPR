@@ -1,15 +1,19 @@
-import random
+import pickle
+import os
+import numpy as np
+
+model_path = os.path.join(os.path.dirname(__file__), "..", "model", "model.pkl")
+vectorizer_path = os.path.join(os.path.dirname(__file__), "..", "model", "vectorizer.pkl")
+
+with open(model_path, "rb") as f:
+    model = pickle.load(f)
+
+with open(vectorizer_path, "rb") as f:
+    vectorizer = pickle.load(f)
 
 def classify_sequence(seq):
-    if "AGAGCTAGAA" in seq or "GTTTTAGAGCTAGAAATAGC" in seq:
-        return "biothreat", "Biological"
-    elif "CAGTCC" in seq or "TTCGGA" in seq:
-        return "chem-threat", "Chemical"
-    elif "TATATA" in seq or "GCGCGC" in seq:
-        return "radio-threat", "Radiological"
-    elif "AATTCCGG" in seq or "CCGGTTAA" in seq:
-        return "nuke-threat", "Nuclear"
-    else:
-        return random.choice([("non-threat", "Biological"), ("non-threat", "Chemical"),
-                              ("non-threat", "Radiological"), ("non-threat", "Nuclear")])
+    X = vectorizer.transform([seq])
+    prediction = model.predict(X)[0]
+    label = "Threat" if prediction == 1 else "Benign"
+    return label, prediction
 

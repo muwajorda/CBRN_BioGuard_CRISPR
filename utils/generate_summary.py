@@ -1,8 +1,15 @@
 def generate_gpt_summary(df):
-    counts = df["predicted_type"].value_counts()
+    threats = df[df['predicted_label'] == "Threat"]
     total = len(df)
-    lines = [f"Total Sequences Analyzed: **{total}**"]
-    for threat_type, count in counts.items():
-        percent = (count / total) * 100
-        lines.append(f"- {threat_type}: **{count}** sequences ({percent:.2f}%)")
-    return "\\n".join(lines)
+    num_threats = len(threats)
+
+    summary = f"""
+    Based on the uploaded sequences, the model identified **{num_threats} potential threats**
+    out of **{total} total sequences**. The model is trained to detect synthetic biological risks
+    simulating possible **CBRN-level misuse scenarios**.
+
+    These results are part of a simulated red-team exercise and do **not** reflect real biological risk.
+    """
+
+    return summary
+
