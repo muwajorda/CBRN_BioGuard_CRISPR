@@ -1,30 +1,19 @@
-import os
-import random
-import pickle
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
+# CBRN-BioGuard CRISPR
 
-def random_dna(length=100):
-    return ''.join(random.choices("ATCG", k=length))
+Simulated biosecurity tool for classifying synthetic DNA sequences as potential CBRN threats.
 
-# Simulate dataset
-sequences = [random_dna() for _ in range(1000)]
-labels = [random.randint(0, 1) for _ in range(1000)]
+## Features
+- Upload CSV files with DNA sequences
+- Classifies each sequence using a trained ML model
+- Generates GPT-style summaries of potential risks
 
-# Vectorize
-vectorizer = CountVectorizer(analyzer='char', ngram_range=(3, 3))
-X = vectorizer.fit_transform(sequences)
+## Requirements
+- Python 3.9+
+- Streamlit
+- scikit-learn
+- pandas
 
-# Train model
-model = MultinomialNB()
-model.fit(X, labels)
-
-# Save vectorizer and model
-os.makedirs("model", exist_ok=True)
-with open("model/vectorizer.pkl", "wb") as f:
-    pickle.dump(vectorizer, f)
-with open("model/model.pkl", "wb") as f:
-    pickle.dump(model, f)
-
-print("✅ Mock model and vectorizer saved to /model/")
+## Run the App
+```bash
+streamlit run app.py
 
